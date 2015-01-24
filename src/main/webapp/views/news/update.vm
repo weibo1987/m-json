@@ -1,0 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title></title> 
+</head>
+<body>
+<br>
+<form action="/news/modify" method="post">
+<input type="hidden" name="iiid" value="$!{news.iiid}">
+<input type="text" name="title" value="$!{news.title}" />
+<input type="text" name="intro" value="$!{news.intro}" />
+<input type="submit" value="提交"> 
+</form>
+<br>
+</body>

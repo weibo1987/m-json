@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'war'
+apply plugin: 'jetty'
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+repositories {
+    //mavenLocal()
+    //mavenCentral()
+}
+
+
+dependencies {
+	compile fileTree(dir: 'libs', include: '*.jar')
+}
+
+uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'e:/'
+} }
+}
+eclipse.classpath.file.withXml {
+    def node = it.asNode();
+    for (Node n : node.children()) {
+        if ("lib".equals(n.attribute("kind"))) {
+            def node_attributes = new Node(n, "attributes");
+            def map = new HashMap();
+            map.put("name", "org.eclipse.jst.component.dependency");
+            map.put("value", "/WEB-INF/lib");
+            def node_attribute = new Node(node_attributes, "attribute", map);
+        }
+    }
+}

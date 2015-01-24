@@ -1,0 +1,10 @@
+#foreach($obj in $newsList) 
+   $velocityCount:&nbsp
+   <p>
+   $!{obj.title}<br>
+   $!{obj.intro} <a href="/news/update?iiid=$!{obj.iiid}">修改</a>&nbsp;<a href="/news/del?iiid=$!{obj.iiid}">删除</a>
+   </p>
+#end
+<p>
+<a href="/news/add">添加</a>
+

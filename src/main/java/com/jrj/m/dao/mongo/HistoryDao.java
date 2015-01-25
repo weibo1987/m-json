@@ -1,12 +1,7 @@
 package com.jrj.m.dao.mongo;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.bson.BSONObject;
 import org.springframework.stereotype.Component;
 
-import com.mongodb.DBCursor;
 import com.mongodb.ReadPreference;
 
 /**
@@ -15,7 +10,7 @@ import com.mongodb.ReadPreference;
  *
  */
 @Component
-public class HistoryDao extends AbstarctMongoDao implements Op{
+public class HistoryDao extends AbstarctMongoDao{
 
 	@Override
 	public ReadPreference getReadPreference() {

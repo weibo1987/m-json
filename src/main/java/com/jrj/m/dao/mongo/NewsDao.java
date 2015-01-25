@@ -2,7 +2,6 @@ package com.jrj.m.dao.mongo;
 
 import org.springframework.stereotype.Component;
 
-import com.jrj.m.model.news.News;
 import com.mongodb.ReadPreference;
 
 /**

@@ -10,7 +10,7 @@
 	<!-- 加载mongodb的属性配置文件 -->
 	<context:property-placeholder location="classpath:mongodb.properties" />
 
-	<bean id="mongoClient" class="com.jrj.m.dao.mongo.JRJMongoClient">
+	<bean id="mongoFactory" class="com.jrj.m.dao.mongo.JRJMongoFactory">
 	 		<constructor-arg index="0" value="${mongo.userName}" />
 	 		<constructor-arg index="1" value="${mongo.password}" />
 	 		<constructor-arg index="2" value="${mongo.dbName}" />

@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.util.StringUtils;
 
+import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
@@ -17,7 +18,7 @@ import com.mongodb.ServerAddress;
  * @author weibo.qin
  *
  */
-public class JRJMongoClient extends MongoClient{
+public class JRJMongoFactory{
 
 	Log log=LogFactory.getLog(this.getClass());
 
@@ -25,30 +26,26 @@ public class JRJMongoClient extends MongoClient{
 	private String dbPassword;
 	private String dbName;
 	private String hostports;
+	private  MongoClient client;
 
-	
-	public JRJMongoClient(String dbUser, String dbPassword, String dbName,
+	private JRJMongoFactory(String dbUser, String dbPassword, String dbName,
 			String hostports) throws UnknownHostException {
 		super();
 		this.dbUser = dbUser;
 		this.dbPassword = dbPassword;
 		this.dbName = dbName;
 		this.hostports = hostports;
+		initMongoClient();
 	}
 
-	public JRJMongoClient() throws UnknownHostException {
+	private JRJMongoFactory() {
 	}
 
+	private void initMongoClient(){
 
-	private JRJMongoClient(List<ServerAddress> seeds,
-			List<MongoCredential> credentialsList) {
-		super(seeds, credentialsList);
-	}
-	
-	public JRJMongoClient getClient(){
 		if(StringUtils.isEmpty(hostports)){
 			log.error("副本集端口信息不能为空！");
-			return null;
+			return ;
 		}
 
 		String[] hostPortArray=hostports.split(",");
@@ -63,11 +60,23 @@ public class JRJMongoClient extends MongoClient{
 			}
 		} catch (UnknownHostException e) {
 			log.error("未知host", e);
-			return null;
+			return ;
 		}
 		
-		JRJMongoClient client = new JRJMongoClient(serverAddressList,mongoCredentialList);
-		return client;
+		if(client==null){
+			synchronized (this) {
+				client=new MongoClient(serverAddressList,mongoCredentialList);
+			}
+		}
+	}
+
+
+	/**
+	 * get DB connection.
+	 * @return
+	 */
+	public DB getDB(){
+		return client.getDB(dbName);
 	}
 
 
@@ -96,5 +105,8 @@ public class JRJMongoClient extends MongoClient{
 		this.hostports = hostports;
 	}
 
+	public MongoClient getClient() {
+		return client;
+	}
 
 }

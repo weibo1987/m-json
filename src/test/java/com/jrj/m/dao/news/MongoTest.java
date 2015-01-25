@@ -8,6 +8,9 @@
  */ 
 package com.jrj.m.dao.news;
 
+import java.util.List;
+
+import org.bson.BSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +42,11 @@ public class MongoTest {
 	}
 	@Test
 	public void findByQuery(){
-		System.out.println(historyDao.findAll().toString());
+		List<BSONObject> list=historyDao.findAll();
+		for(BSONObject bo:list){
+			System.out.println(bo.toString());
+		}
+		
 	}
 
 	public void removeByQueryTest(){

@@ -21,16 +21,6 @@ public class HistoryDao extends AbstarctMongoDao implements Op{
 	public ReadPreference getReadPreference() {
 		return ReadPreference.PRIMARY;
 	}
-
-	@Override
-	public List<BSONObject> findAll() {
-		List<BSONObject> result=new ArrayList<BSONObject>();
-		DBCursor cursor=this.getMongoClient().getDB("foo").getCollection("history").find().batchSize(2);
-		while(cursor.hasNext()){
-			result.add(cursor.next());
-		}
-		return result;
-	}
 	
 	
 }

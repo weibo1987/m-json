@@ -14,7 +14,7 @@ public class HistoryDao extends AbstarctMongoDao{
 
 	@Override
 	public ReadPreference getReadPreference() {
-		return ReadPreference.PRIMARY;
+		return ReadPreference.secondary();
 	}
 	
 	

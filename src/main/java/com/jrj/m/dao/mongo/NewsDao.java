@@ -14,7 +14,7 @@ public class NewsDao extends AbstarctMongoDao{
 
 	@Override
 	public ReadPreference getReadPreference() {
-		return ReadPreference.SECONDARY;
+		return ReadPreference.secondaryPreferred();
 	}
 
 	

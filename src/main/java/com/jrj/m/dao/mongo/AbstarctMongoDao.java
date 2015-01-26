@@ -12,6 +12,7 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.ReadPreference;
+import com.mongodb.WriteResult;
 
 /**
  * 
@@ -58,6 +59,7 @@ public abstract class AbstarctMongoDao{
 		List<BSONObject> result=new ArrayList<BSONObject>();
 		DBCursor cursor=this.getDBCollection().find().batchSize(2);
 		while(cursor.hasNext()){
+			System.out.println(cursor);
 			result.add(cursor.next());
 		}
 		return result;
@@ -75,6 +77,12 @@ public abstract class AbstarctMongoDao{
 			result.add(cursor.next());
 		}
 		return result;
+	}
+	
+	public int insert(DBObject... arr){
+		WriteResult wr=this.getDBCollection().insert(arr);
+		System.out.println(wr.toString());
+		return wr.getN();
 	}
 	
 }

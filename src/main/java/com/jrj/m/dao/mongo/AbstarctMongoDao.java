@@ -59,7 +59,6 @@ public abstract class AbstarctMongoDao{
 		List<BSONObject> result=new ArrayList<BSONObject>();
 		DBCursor cursor=this.getDBCollection().find().batchSize(2);
 		while(cursor.hasNext()){
-			System.out.println(cursor);
 			result.add(cursor.next());
 		}
 		return result;

@@ -37,4 +37,12 @@ public class testController {
         JSONArray json=JSONArray.fromObject(newsList);
         return "@"+json.toString();
     }
+	
+	
+	@Get("news")
+    public String getNews() throws Exception {
+        List<BSONObject> newsList = mongoService.findNews();
+        JSONArray json=JSONArray.fromObject(newsList);
+        return "@"+json.toString();
+    }
 }

@@ -66,7 +66,7 @@ public class MongoTest {
 		System.out.println(this.newsDao.getReadPreference().getName());
 		System.out.println(this.historyDao.getReadPreference().getName());
 		
-		List<BSONObject> list=historyDao.findAll();
+		List<BSONObject> list=newsDao.findAll();
 		for(BSONObject bo:list){
 			System.out.println(bo.toString());
 		}

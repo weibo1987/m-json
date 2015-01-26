@@ -58,8 +58,8 @@ public class NewsDAOTest {
 
 	    @Test
 	    public void getNewsTest() {
-	        List<News> newsList = newsDAO.find();
-	        System.out.print(newsList.toString());
+//	        List<News> newsList = newsDAO.find();
+//	        System.out.print(newsList.toString());
 	        //for(News news:newsList)
 	        	
 	       // for(News news:newsList)

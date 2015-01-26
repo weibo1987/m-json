@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jrj.m.dao.mongo.HistoryDao;
+import com.jrj.m.dao.mongo.NewsDao;
 
 /**
  * 
@@ -25,7 +26,9 @@ import com.jrj.m.dao.mongo.HistoryDao;
 public class TestMongoService {
 	@Autowired
 	private HistoryDao historyDao;
-
+	@Autowired
+	private NewsDao newsDao;
+	
 	/**
 	 * 
 	 * @Title: find
@@ -36,6 +39,10 @@ public class TestMongoService {
 	 */
 	public List<BSONObject> find() {
 		return historyDao.findAll();
+	}
+	
+	public List<BSONObject> findNews() {
+		return newsDao.findAll();
 	}
 
 }

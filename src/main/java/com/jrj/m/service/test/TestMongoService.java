@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import com.jrj.m.dao.mongo.HistoryDao;
 import com.jrj.m.dao.mongo.NewsDao;
+import com.mongodb.BasicDBObject;
 
 /**
  * 
@@ -43,6 +44,10 @@ public class TestMongoService {
 	
 	public List<BSONObject> findNews() {
 		return newsDao.findAll();
+	}
+
+	public List<BSONObject> findNewsList() {
+		return newsDao.findByCondition(new BasicDBObject(), new BasicDBObject("title", 1).append("pub_time", 1));
 	}
 
 }

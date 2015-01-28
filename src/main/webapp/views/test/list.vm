@@ -1,0 +1,5 @@
+<ul>
+#foreach($obj in $newsList) 
+	<li><a href="#$obj.get('_id')">$!{obj.title}</a>&nbsp;&nbsp;&nbsp;&nbsp; $!{obj.pub_time}</li>
+#end
+</ul>

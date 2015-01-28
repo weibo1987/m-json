@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 import org.bson.BSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
@@ -70,8 +71,12 @@ public abstract class AbstarctMongoDao{
 	 * @return
 	 */
 	public List<BSONObject> findByCondition(DBObject condition){
+		return findByCondition(condition,new BasicDBObject());
+	}
+	
+	public List<BSONObject> findByCondition(DBObject condition,DBObject fieldsSelected){
 		List<BSONObject> result=new ArrayList<BSONObject>();
-		DBCursor cursor=this.getDBCollection().find(condition).batchSize(2);
+		DBCursor cursor=this.getDBCollection().find(condition,fieldsSelected);
 		while(cursor.hasNext()){
 			result.add(cursor.next());
 		}

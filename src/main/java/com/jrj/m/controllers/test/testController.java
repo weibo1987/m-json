@@ -10,6 +10,7 @@ package com.jrj.m.controllers.test;
 
 import java.util.List;
 
+import net.paoding.rose.web.Invocation;
 import net.paoding.rose.web.annotation.Path;
 import net.paoding.rose.web.annotation.rest.Get;
 import net.sf.json.JSONArray;
@@ -44,5 +45,19 @@ public class testController {
         List<BSONObject> newsList = mongoService.findNews();
         JSONArray json=JSONArray.fromObject(newsList);
         return "@"+json.toString();
+    }
+	
+	@Get("newsList")
+    public String getNewsList() throws Exception {
+        List<BSONObject> newsList = mongoService.findNewsList();
+        JSONArray json=JSONArray.fromObject(newsList);
+        return "@"+json.toString();
+    }
+	
+	@Get("list")
+    public String List(Invocation inv) throws Exception {
+        List<BSONObject> newsList = mongoService.findNewsList();
+        inv.addModel("newsList", newsList);
+        return "list";
     }
 }

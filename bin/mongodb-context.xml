@@ -17,4 +17,10 @@
 	 		<constructor-arg index="3" value="${mongo.hostport}" />
 	</bean>
 
+	<bean id="dataSource1" class="com.jrj.m.dao.mongo.MongoDataSource">
+		<property name="dbName" value="${mongo.dbName}" />
+		<property name="dbUser" value="${mongo.userName}" />
+		<property name="dbPwd" value="${mongo.password}" />
+		<property name="readPrefrence" value="1" />
+	</bean>
 </beans>

@@ -17,5 +17,10 @@ public class NewsDao extends AbstarctMongoDao{
 		return ReadPreference.secondaryPreferred();
 	}
 
+	@Override
+	public String getMongoDataSourceMark() {
+		return null;
+	}
+
 	
 }

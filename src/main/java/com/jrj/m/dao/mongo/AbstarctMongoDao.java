@@ -9,9 +9,11 @@ import org.bson.BSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
+import com.mongodb.MongoClient;
 import com.mongodb.ReadPreference;
 import com.mongodb.WriteResult;
 
@@ -37,10 +39,31 @@ public abstract class AbstarctMongoDao{
 	 * @return
 	 */
 	public abstract ReadPreference getReadPreference();
+	/**
+	 * 获取当前数据源的mark
+	 * @return
+	 */
+	public abstract String getMongoDataSourceMark();
+	/**
+	 * 动态获得mongoClient
+	 * @return
+	 */
+	public MongoClient getMongoClient(){
+		////	在工厂内设置目标数据源的标志
+		mongoFactory.getRout().setDefaultTargetDataSourceMark(getMongoDataSourceMark());
+		return mongoFactory.createMongoClient();
+	}
 	
+	/**
+	 * 动态获得默认的DBCollection
+	 * @return
+	 */
 	public DBCollection getDBCollection() {
-		mongoFactory.getClient().setReadPreference(getReadPreference());
-		return mongoFactory.getDB().getCollection(getDynamicCollectionName(this.getClass().getName()));
+		////	在工厂内设置目标数据源的标志
+		mongoFactory.getRout().setDefaultTargetDataSourceMark(getMongoDataSourceMark());
+		////	获取验证时的默认DB对象
+		DB db=mongoFactory.createMongoClient().getDB(mongoFactory.getRout().getDataSourceByEnum(getMongoDataSourceMark()).getDbName());
+		return db.getCollection(getDynamicCollectionName(this.getClass().getName()));
 	}
 
 	private String getDynamicCollectionName(String name) {

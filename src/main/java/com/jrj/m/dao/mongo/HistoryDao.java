@@ -16,6 +16,11 @@ public class HistoryDao extends AbstarctMongoDao{
 	public ReadPreference getReadPreference() {
 		return ReadPreference.secondary();
 	}
+
+	@Override
+	public String getMongoDataSourceMark() {
+		return null;
+	}
 	
 	
 }

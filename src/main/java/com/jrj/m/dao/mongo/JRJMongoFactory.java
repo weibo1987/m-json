@@ -3,6 +3,7 @@ package com.jrj.m.dao.mongo;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -21,34 +22,40 @@ import com.mongodb.ServerAddress;
 public class JRJMongoFactory{
 
 	Log log=LogFactory.getLog(this.getClass());
-
-	private String dbUser;
-	private String dbPassword;
-	private String dbName;
-	private String hostports;
-	private  MongoClient client;
-
-	private JRJMongoFactory(String dbUser, String dbPassword, String dbName,
-			String hostports) throws UnknownHostException {
-		super();
-		this.dbUser = dbUser;
-		this.dbPassword = dbPassword;
-		this.dbName = dbName;
-		this.hostports = hostports;
-		initMongoClient();
+	/**
+	 * 保存所有数据源的mongoClient池组
+	 */
+	private final static ConcurrentHashMap<String, MongoClient> mongoClientPool=new ConcurrentHashMap<String, MongoClient>();
+	/**
+	 * mongo 数据源路由
+	 */
+	private MongoDataSourceRoute rout;
+	
+	public MongoDataSourceRoute getRout() {
+		return rout;
 	}
 
+	public void setRout(MongoDataSourceRoute rout) {
+		this.rout = rout;
+	}
+	
 	private JRJMongoFactory() {
 	}
+	
+	/**
+	 * 构建mongoClient
+	 * @return
+	 */
+	public MongoClient createMongoClient() {
 
-	private void initMongoClient(){
-
-		if(StringUtils.isEmpty(hostports)){
+		if(mongoClientPool.contains(rout.getDefaultTargetDataSourceMark())) return mongoClientPool.get(rout.getDefaultTargetDataSourceMark());
+		
+		if(StringUtils.isEmpty(this.rout.getDecideDataSource().getHostports())){
 			log.error("副本集端口信息不能为空！");
-			return ;
+			return null;
 		}
 
-		String[] hostPortArray=hostports.split(",");
+		String[] hostPortArray=this.rout.getDecideDataSource().getHostports().split(",");
 
 		List<ServerAddress> serverAddressList=new ArrayList<ServerAddress>();
 		List<MongoCredential> mongoCredentialList=new ArrayList<MongoCredential>();
@@ -56,57 +63,17 @@ public class JRJMongoFactory{
 		try {
 			for(String hostport:hostPortArray){
 				serverAddressList.add(new ServerAddress(hostport.split(":")[0],Integer.parseInt(hostport.split(":")[1])));
-				mongoCredentialList.add(MongoCredential.createCredential(dbUser, dbName, dbPassword.toCharArray()));
+				mongoCredentialList.add(MongoCredential.createCredential(this.rout.getDecideDataSource().getDbUser(), this.rout.getDecideDataSource().getDbName(), this.rout.getDecideDataSource().getDbPwd().toCharArray()));
 			}
 		} catch (UnknownHostException e) {
 			log.error("未知host", e);
-			return ;
+			return null;
 		}
 		
-		if(client==null){
-			synchronized (this) {
-				client=new MongoClient(serverAddressList,mongoCredentialList);
-			}
-		}
+		mongoClientPool.put(rout.getDefaultTargetDataSourceMark(), new MongoClient(serverAddressList,mongoCredentialList));
+		
+		return mongoClientPool.get(rout.getDefaultTargetDataSourceMark());
 	}
-
-
-	/**
-	 * get DB connection.
-	 * @return
-	 */
-	public DB getDB(){
-		return client.getDB(dbName);
-	}
-
-
-	public String getDbUser() {
-		return dbUser;
-	}
-	public void setDbUser(String dbUser) {
-		this.dbUser = dbUser;
-	}
-	public String getDbPassword() {
-		return dbPassword;
-	}
-	public void setDbPassword(String dbPassword) {
-		this.dbPassword = dbPassword;
-	}
-	public String getDbName() {
-		return dbName;
-	}
-	public void setDbName(String dbName) {
-		this.dbName = dbName;
-	}
-	public String getHostports() {
-		return hostports;
-	}
-	public void setHostports(String hostports) {
-		this.hostports = hostports;
-	}
-
-	public MongoClient getClient() {
-		return client;
-	}
-
+	
+	
 }
